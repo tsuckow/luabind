@@ -19,7 +19,7 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
-
+#include "../LuabindTableNames.h"
 #define LUABIND_BUILDING
 
 #include <luabind/lua_include.hpp>
@@ -42,7 +42,7 @@ namespace luabind { namespace detail {
             // mark the table with our (hopefully) unique tag
             // that says that the user data that has this
             // metatable is a class_rep
-            lua_pushstring(L, "__luabind_classrep");
+            lua_pushstring(L, __luabind_classrep);
             lua_pushboolean(L, 1);
             lua_rawset(L, -3);
 
@@ -75,7 +75,7 @@ namespace luabind { namespace detail {
         {
             lua_newtable(L);
 
-            lua_pushstring(L, "__luabind_classrep");
+            lua_pushstring(L, __luabind_classrep);
             lua_pushboolean(L, 1);
             lua_rawset(L, -3);
 
@@ -130,7 +130,7 @@ namespace luabind { namespace detail {
 
 #endif
 
-        lua_pushstring(L, "__luabind_classes");
+        lua_pushstring(L, __luabind_classes);
         lua_gettable(L, LUA_REGISTRYINDEX);
         class_registry* p = static_cast<class_registry*>(lua_touserdata(L, -1));
         lua_pop(L, 1);

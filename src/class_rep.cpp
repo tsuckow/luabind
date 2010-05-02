@@ -19,7 +19,7 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
-
+#include "../LuabindTableNames.h"
 #define LUABIND_BUILDING
 
 #include <luabind/lua_include.hpp>
@@ -69,12 +69,12 @@ luabind::detail::class_rep::class_rep(type_id const& type
 
 	m_instance_metatable = r->cpp_instance();
 
-    lua_pushstring(L, "__luabind_cast_graph");
+    lua_pushstring(L, __luabind_cast_graph);
     lua_gettable(L, LUA_REGISTRYINDEX);
     m_casts = static_cast<cast_graph*>(lua_touserdata(L, -1));
     lua_pop(L, 1);
 
-    lua_pushstring(L, "__luabind_class_id_map");
+    lua_pushstring(L, __luabind_class_id_map);
     lua_gettable(L, LUA_REGISTRYINDEX);
     m_classes = static_cast<class_id_map*>(lua_touserdata(L, -1));
     lua_pop(L, 1);
@@ -102,12 +102,12 @@ luabind::detail::class_rep::class_rep(lua_State* L, const char* name)
 
 	m_instance_metatable = r->lua_instance();
 
-    lua_pushstring(L, "__luabind_cast_graph");
+    lua_pushstring(L, __luabind_cast_graph);
     lua_gettable(L, LUA_REGISTRYINDEX);
     m_casts = static_cast<cast_graph*>(lua_touserdata(L, -1));
     lua_pop(L, 1);
 
-    lua_pushstring(L, "__luabind_class_id_map");
+    lua_pushstring(L, __luabind_class_id_map);
     lua_gettable(L, LUA_REGISTRYINDEX);
     m_classes = static_cast<class_id_map*>(lua_touserdata(L, -1));
     lua_pop(L, 1);
@@ -146,7 +146,7 @@ int luabind::detail::class_rep::constructor_dispatcher(lua_State* L)
         && cls->get_class_type() == class_rep::lua_class
         && !cls->bases().empty())
     {
-        lua_pushstring(L, "super");
+        lua_pushstring(L, String_super);
         lua_pushvalue(L, 1);
         lua_pushvalue(L, -3);
         lua_pushcclosure(L, super_callback, 2);
@@ -169,7 +169,7 @@ int luabind::detail::class_rep::constructor_dispatcher(lua_State* L)
 
     if (super_deprecation_disabled)
     {
-        lua_pushstring(L, "super");
+        lua_pushstring(L, String_super);
         lua_pushnil(L);
         lua_settable(L, LUA_GLOBALSINDEX);
     }
@@ -214,13 +214,13 @@ int luabind::detail::class_rep::super_callback(lua_State* L)
 
 	if (base->bases().empty())
 	{
-		lua_pushstring(L, "super");
+		lua_pushstring(L, String_super);
 		lua_pushnil(L);
 		lua_settable(L, LUA_GLOBALSINDEX);
 	}
 	else
 	{
-		lua_pushstring(L, "super");
+		lua_pushstring(L, String_super);
 		lua_pushlightuserdata(L, base);
 		lua_pushvalue(L, lua_upvalueindex(2));
 		lua_pushcclosure(L, super_callback, 2);
@@ -241,7 +241,7 @@ int luabind::detail::class_rep::super_callback(lua_State* L)
 	// TODO: instead of clearing the global variable "super"
 	// store it temporarily in the registry. maybe we should
 	// have some kind of warning if the super global is used?
-	lua_pushstring(L, "super");
+	lua_pushstring(L, String_super);
 	lua_pushnil(L);
 	lua_settable(L, LUA_GLOBALSINDEX);
 
@@ -329,7 +329,7 @@ bool luabind::detail::is_class_rep(lua_State* L, int index)
 {
 	if (lua_getmetatable(L, index) == 0) return false;
 
-	lua_pushstring(L, "__luabind_classrep");
+	lua_pushstring(L, __luabind_classrep);
 	lua_gettable(L, -2);
 	if (lua_toboolean(L, -1))
 	{

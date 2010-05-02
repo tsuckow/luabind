@@ -19,7 +19,7 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
-
+#include "../LuabindTableNames.h"
 #define LUABIND_BUILDING
 
 #include <luabind/lua_include.hpp>
@@ -119,7 +119,7 @@ namespace
         if (detail::class_registry::get_registry(L))
             return;
 
-        lua_pushstring(L, "__luabind_classes");
+        lua_pushstring(L, __luabind_classes);
         detail::class_registry* r = static_cast<detail::class_registry*>(
             lua_newuserdata(L, sizeof(detail::class_registry)));
 
@@ -139,7 +139,7 @@ namespace
         new(r) detail::class_registry(L);
         lua_settable(L, LUA_REGISTRYINDEX);
 
-        lua_pushstring(L, "__luabind_class_id_map");
+        lua_pushstring(L, __luabind_class_id_map);
         void* classes_storage = lua_newuserdata(L, sizeof(detail::class_id_map));
         detail::class_id_map* class_ids = new (classes_storage) detail::class_id_map;
         (void)class_ids;
@@ -151,7 +151,7 @@ namespace
 
         lua_settable(L, LUA_REGISTRYINDEX);
 
-        lua_pushstring(L, "__luabind_cast_graph");
+        lua_pushstring(L, __luabind_cast_graph);
         void* cast_graph_storage = lua_newuserdata(
             L, sizeof(detail::cast_graph));
         detail::cast_graph* graph = new (cast_graph_storage) detail::cast_graph;
@@ -164,7 +164,7 @@ namespace
 
         lua_settable(L, LUA_REGISTRYINDEX);
 
-        lua_pushstring(L, "__luabind_class_map");
+        lua_pushstring(L, __luabind_class_map);
         void* class_map_storage = lua_newuserdata(
             L, sizeof(detail::class_map));
         detail::class_map* classes = new (class_map_storage) detail::class_map;
@@ -178,11 +178,11 @@ namespace
         lua_settable(L, LUA_REGISTRYINDEX);
 
         // add functions (class, cast etc...)
-        lua_pushstring(L, "class");
+        lua_pushstring(L, String_class);
         lua_pushcclosure(L, detail::create_class::stage1, 0);
         lua_settable(L, LUA_GLOBALSINDEX);
 
-        lua_pushstring(L, "property");
+        lua_pushstring(L, String_property);
         lua_pushcclosure(L, &make_property, 0);
         lua_settable(L, LUA_GLOBALSINDEX);
 
@@ -190,7 +190,7 @@ namespace
         lua_pushlightuserdata(L, L);
         lua_rawset(L, LUA_REGISTRYINDEX);
 
-        lua_pushstring(L, "super");
+        lua_pushstring(L, String_super);
         lua_pushcclosure(L, &deprecated_super, 0);
         lua_settable(L, LUA_GLOBALSINDEX);
     }

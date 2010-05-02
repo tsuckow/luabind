@@ -19,7 +19,7 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 // OR OTHER DEALINGS IN THE SOFTWARE.
-
+#include "../../LuabindTableNames.h"
 #define LUABIND_BUILDING
 
 #include <luabind/detail/object_rep.hpp>
@@ -213,7 +213,7 @@ namespace luabind { namespace detail
         // just indicate that this really is a class and not just
         // any user data
         lua_pushboolean(L, 1);
-        lua_setfield(L, -2, "__luabind_class");
+        lua_setfield(L, -2, __luabind_class);
 
         // This is used as a tag to determine if a userdata is a luabind
         // instance. We use a numeric key and a cclosure for fast comparision.
